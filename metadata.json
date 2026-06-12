@@ -1,0 +1,8 @@
+{
+  "name": " Genesis Verse Rift Extraction",
+  "description": "Battle players worldwide in real-time multiplayer Card Captor",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

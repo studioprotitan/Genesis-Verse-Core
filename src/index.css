@@ -1,0 +1,101 @@
+@import "tailwindcss";
+
+@keyframes radarPulse {
+  0% {
+    transform: scale(0.3);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2.8);
+    opacity: 0;
+  }
+}
+
+@keyframes pingPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.4);
+    opacity: 1;
+  }
+}
+
+.animate-radar-ripple {
+  animation: radarPulse 1.8s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
+}
+
+.animate-ping-pulse {
+  animation: pingPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes pingFade {
+  0% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  8% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  12% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  75% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.animate-ping-fade-out {
+  animation: pingFade 5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes shieldRipple {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+@keyframes shieldGlowPulse {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(34, 211, 238, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(45, 212, 191, 0.6);
+  }
+}
+
+.animate-shield-ripple {
+  animation: shieldRipple 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.animate-shield-glow {
+  animation: shieldGlowPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes criticalBorderFlash {
+  0%, 100% {
+    border-color: rgba(239, 68, 68, 0.2);
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.1);
+    background-color: rgba(0, 0, 0, 0.75);
+  }
+  50% {
+    border-color: rgba(239, 68, 68, 1);
+    box-shadow: 0 0 25px rgba(239, 68, 68, 0.8), inset 0 0 12px rgba(239, 68, 68, 0.4);
+    background-color: rgba(127, 29, 29, 0.45);
+  }
+}
+
+.animate-critical-flash {
+  animation: criticalBorderFlash 0.8s ease-in-out infinite;
+}
+
+

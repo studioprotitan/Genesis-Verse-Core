@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PROJECT ORACLE — GENESIS VERSE · ABYSSUM GATEWAY</title>
+
+<!-- VLAAD FONTS: Display + Mono -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Inter:wght@300;400&display=swap" rel="stylesheet" />
+
+<!-- BABYLON.JS 6 CDN -->
+<script src="https://cdn.babylonjs.com/babylon.js"></script>
+<script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+<script src="https://cdn.babylonjs.com/materialsLibrary/babylonjs.materials.min.js"></script>
+
+<style>
+/* ═══════════════════════════════════════════════════════════════════
+   VLAAD DESIGN SYSTEM — ENIGMATIC UNIVERSES
+   Commander Antonio · Simpro Titans Studio
+   Zero Drift Guaranteed
+═══════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* VLAAD COLOR TOKENS */
+  --forge-orange:     #F58220;
+  --forge-amber:      #FFAA33;
+  --forge-dim:        #7A4010;
+  --abyssum-indigo:   #1A0A3E;
+  --abyssum-deep:     #0A0518;
+  --abyssum-mid:      #12082B;
+  --veil-cyan:        #00FFD4;
+  --veil-cyan-dim:    #007A65;
+  --rift-red:         #FF2B4E;
+  --rift-red-dim:     #7A0020;
+  --oracle-gold:      #FFD166;
+  --oracle-gold-dim:  #7A5A10;
+  --grid-line:        rgba(0, 255, 212, 0.06);
+  --grid-line-bright: rgba(0, 255, 212, 0.15);
+  --panel-bg:         rgba(10, 5, 24, 0.92);
+  --panel-border:     rgba(0, 255, 212, 0.18);
+  --panel-border-hot: rgba(245, 130, 32, 0.5);
+  --text-primary:     #E8E0FF;
+  --text-secondary:   #8A7AB0;
+  --text-mono:        #00FFD4;
+  --text-warn:        #F58220;
+  --text-danger:      #FF2B4E;
+
+  /* VLAAD SPACING */
+  --gap-xs: 4px; --gap-sm: 8px; --gap-md: 16px; --gap-lg: 24px; --gap-xl: 40px;
+
+  /* VLAAD MOTION */
+  --ease-sharp: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-glitch: steps(4);
+
+  /* FONTS */
+  --font-display: 'Orbitron', monospace;
+  --font-ui: 'Rajdhani', sans-serif;
+  --font-mono: 'Share Tech Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100%; height: 100%;
+  background: var(--abyssum-deep);
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  overflow: hidden;
+}
+
+/* ── GRID BACKGROUND ───────────────────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+body::after {
+  content: '';
+  position: fixed; inset: 0; z-index: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 20%, rgba(26,10,62,0.7) 0%, transparent 70%),
+              radial-gradient(ellipse 40% 40% at 80% 80%, rgba(0,60,50,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ── MASTER LAYOUT ─────────────────────────────────────────────── */
+#root {
+  position: relative; z-index: 1;
+  display: grid;
+  grid-template-columns: 280px 1fr 280px;
+  grid-template-rows: 56px 1fr 180px;
+  gap: 0;
+  width: 100vw; height: 100vh;
+  overflow: hidden;
+}
+
+/* ── TOPBAR ────────────────────────────────────────────────────── */
+#topbar {
+  grid-column: 1 / -1;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 var(--gap-lg);
+  background: rgba(10,5,24,0.97);
+  border-bottom: 1px solid var(--grid-line-bright);
+  position: relative; z-index: 100;
+}
+
+.topbar-brand {
+  display: flex; align-items: center; gap: var(--gap-md);
+}
+.topbar-brand .logo-mark {
+  width: 32px; height: 32px;
+  border: 1.5px solid var(--forge-orange);
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+.topbar-brand .logo-mark::before {
+  content: 'Ω';
+  font-family: var(--font-display);
+  font-size: 16px; color: var(--forge-orange);
+}
+.topbar-brand .logo-text {
+  font-family: var(--font-display);
+  font-size: 13px; letter-spacing: 0.2em;
+  color: var(--text-primary);
+}
+.topbar-brand .logo-text span { color: var(--forge-orange); }
+
+.topbar-nav {
+  display: flex; gap: 2px;
+}
+.nav-tab {
+  font-family: var(--font-mono);
+  font-size: 10px; letter-spacing: 0.15em;
+  color: var(--text-secondary);
+  padding: 6px 16px;
+  border: 1px solid transparent;
+  background: none;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-transform: uppercase;
+}
+.nav-tab:hover { color: var(--veil-cyan); border-color: var(--panel-border); }
+.nav-tab.active {
+  color: var(--forge-orange); border-color: var(--panel-border-hot);
+  background: rgba(245,130,32,0.05);
+}
+
+.topbar-status {
+  display: flex; align-items: center; gap: var(--gap-md);
+  font-family: var(--font-mono); font-size: 10px;
+}
+.status-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--veil-cyan);
+  box-shadow: 0 0 6px var(--veil-cyan);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+.status-dot.warn { background: var(--forge-orange); box-shadow: 0 0 6px var(--forge-orange); }
+.status-label { color: var(--text-secondary); }
+.status-value { color: var(--veil-cyan); }
+
+/* ── LEFT PANEL — ORACLE AI ────────────────────────────────────── */
+#panel-left {
+  grid-row: 2;
+  display: flex; flex-direction: column; gap: 0;
+  border-right: 1px solid var(--grid-line-bright);
+  overflow: hidden;
+}
+
+/* ── CENTER — BABYLON VIEWPORT ─────────────────────────────────── */
+#panel-center {
+  grid-row: 2;
+  position: relative;
+  overflow: hidden;
+}
+
+#babylon-canvas {
+  width: 100%; height: 100%;
+  display: block;
+  background: var(--abyssum-deep);
+}
+
+/* TRAIN HUD OVERLAY on canvas */
+#train-hud {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+.train-corner {
+  position: absolute;
+  font-family: var(--font-mono); font-size: 9px;
+  color: var(--veil-cyan); opacity: 0.7;
+}
+.train-corner.tl { top: 12px; left: 12px; }
+.train-corner.tr { top: 12px; right: 12px; text-align: right; }
+.train-corner.bl { bottom: 12px; left: 12px; }
+.train-corner.br { bottom: 12px; right: 12px; text-align: right; }
+
+.corner-bracket {
+  position: absolute;
+  width: 20px; height: 20px;
+  border-color: var(--veil-cyan);
+  border-style: solid;
+  opacity: 0.4;
+}
+.corner-bracket.tl { top: 8px; left: 8px; border-width: 1px 0 0 1px; }
+.corner-bracket.tr { top: 8px; right: 8px; border-width: 1px 1px 0 0; }
+.corner-bracket.bl { bottom: 8px; left: 8px; border-width: 0 0 1px 1px; }
+.corner-bracket.br { bottom: 8px; right: 8px; border-width: 0 1px 1px 0; }
+
+/* ── RIGHT PANEL ───────────────────────────────────────────────── */
+#panel-right {
+  grid-row: 2;
+  display: flex; flex-direction: column; gap: 0;
+  border-left: 1px solid var(--grid-line-bright);
+  overflow: hidden;
+}
+
+/* ── BOTTOM BAR — CST HMI-HUD IFRAMES ─────────────────────────── */
+#bottom-bar {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  gap: 0;
+  border-top: 1px solid var(--grid-line-bright);
+  background: rgba(10,5,24,0.98);
+  overflow: hidden;
+}
+
+/* ── PANEL BLOCK COMPONENT ─────────────────────────────────────── */
+.panel-block {
+  border-bottom: 1px solid var(--grid-line-bright);
+  padding: var(--gap-md);
+}
+.panel-block:last-child { border-bottom: none; }
+
+.panel-label {
+  font-family: var(--font-mono);
+  font-size: 9px; letter-spacing: 0.2em;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  margin-bottom: var(--gap-sm);
+  display: flex; align-items: center; gap: var(--gap-sm);
+}
+.panel-label::before {
+  content: '▸';
+  color: var(--forge-orange); font-size: 8px;
+}
+
+/* ── ORACLE AI PANEL ───────────────────────────────────────────── */
+#oracle-panel {
+  display: flex; flex-direction: column;
+  height: 100%; overflow: hidden;
+}
+
+.oracle-header {
+  padding: var(--gap-md);
+  border-bottom: 1px solid var(--grid-line-bright);
+  display: flex; align-items: center; gap: var(--gap-sm);
+  background: rgba(26,10,62,0.6);
+}
+.oracle-avatar {
+  width: 36px; height: 36px;
+  border: 1.5px solid var(--oracle-gold);
+  border-radius: 2px;
+  background: radial-gradient(circle at 40% 35%, rgba(255,209,102,0.2), transparent 60%),
+              var(--abyssum-mid);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; position: relative;
+  overflow: hidden;
+}
+.oracle-avatar::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,209,102,0.1) 0%, transparent 50%);
+}
+.oracle-meta { flex: 1; }
+.oracle-name {
+  font-family: var(--font-display);
+  font-size: 11px; color: var(--oracle-gold); letter-spacing: 0.1em;
+}
+.oracle-status {
+  font-family: var(--font-mono); font-size: 9px;
+  color: var(--veil-cyan); display: flex; align-items: center; gap: 4px;
+  margin-top: 2px;
+}
+.oracle-pulse {
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--veil-cyan);
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}
+
+#oracle-chat-log {
+  flex: 1; overflow-y: auto; padding: var(--gap-sm);
+  display: flex; flex-direction: column; gap: var(--gap-sm);
+  scrollbar-width: thin;
+  scrollbar-color: var(--panel-border) transparent;
+}
+
+.oracle-msg {
+  font-size: 12px; line-height: 1.5;
+  border-radius: 2px; padding: 8px 10px;
+  position: relative;
+  animation: fade-up 0.3s var(--ease-sharp);
+}
+.oracle-msg.ai {
+  background: rgba(26,10,62,0.7);
+  border-left: 2px solid var(--oracle-gold);
+  color: var(--text-primary);
+}
+.oracle-msg.user {
+  background: rgba(0,255,212,0.04);
+  border-left: 2px solid var(--veil-cyan);
+  color: var(--text-secondary);
+  align-self: flex-end; width: 90%;
+}
+.oracle-msg .msg-tag {
+  font-family: var(--font-mono); font-size: 8px;
+  color: var(--text-secondary); margin-bottom: 4px;
+}
+.oracle-msg.ai .msg-tag { color: var(--oracle-gold-dim); }
+
+.oracle-input-row {
+  display: flex; gap: 0;
+  border-top: 1px solid var(--grid-line-bright);
+}
+#oracle-input {
+  flex: 1;
+  background: rgba(26,10,62,0.4);
+  border: none; border-right: 1px solid var(--grid-line-bright);
+  color: var(--text-primary);
+  font-family: var(--font-mono); font-size: 11px;
+  padding: 10px 12px;
+  outline: none;
+}
+#oracle-input::placeholder { color: var(--text-secondary); opacity: 0.5; }
+#oracle-send {
+  background: rgba(245,130,32,0.1);
+  border: none; border-left: none;
+  color: var(--forge-orange);
+  font-family: var(--font-mono); font-size: 10px;
+  padding: 10px 14px; cursor: pointer;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  transition: background 0.15s;
+}
+#oracle-send:hover { background: rgba(245,130,32,0.25); }
+
+/* Oracle VLAAD Mode Chips */
+.oracle-modes {
+  display: flex; gap: 4px;
+  padding: var(--gap-sm) var(--gap-md);
+  border-bottom: 1px solid var(--grid-line-bright);
+}
+.mode-chip {
+  font-family: var(--font-mono); font-size: 9px;
+  padding: 3px 8px; border-radius: 1px;
+  border: 1px solid transparent;
+  cursor: pointer; transition: all 0.15s;
+  text-transform: uppercase; letter-spacing: 0.1em;
+}
+.mode-chip.pulse { color: var(--veil-cyan); border-color: var(--veil-cyan-dim); }
+.mode-chip.trace { color: var(--forge-amber); border-color: var(--forge-dim); }
+.mode-chip.veil  { color: var(--rift-red); border-color: var(--rift-red-dim); }
+.mode-chip.active.pulse { background: rgba(0,255,212,0.12); border-color: var(--veil-cyan); }
+.mode-chip.active.trace { background: rgba(255,170,51,0.12); border-color: var(--forge-amber); }
+.mode-chip.active.veil  { background: rgba(255,43,78,0.12); border-color: var(--rift-red); }
+.mode-chip:hover { opacity: 0.8; }
+
+/* ── RIGHT PANEL: TRAIN ESCORT STATUS ─────────────────────────── */
+.stat-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 5px 0; border-bottom: 1px solid rgba(0,255,212,0.04);
+  font-size: 12px;
+}
+.stat-row:last-child { border-bottom: none; }
+.stat-key { color: var(--text-secondary); font-family: var(--font-mono); font-size: 10px; }
+.stat-val { color: var(--text-mono); font-family: var(--font-mono); font-size: 11px; }
+.stat-val.warn { color: var(--text-warn); }
+.stat-val.danger { color: var(--text-danger); }
+.stat-val.good { color: var(--veil-cyan); }
+
+/* BAR METERS */
+.meter-row { margin-bottom: 10px; }
+.meter-label {
+  display: flex; justify-content: space-between;
+  font-family: var(--font-mono); font-size: 9px;
+  color: var(--text-secondary); margin-bottom: 4px;
+}
+.meter-track {
+  height: 3px; background: rgba(255,255,255,0.06);
+  position: relative; overflow: hidden;
+}
+.meter-fill {
+  height: 100%;
+  transition: width 0.5s var(--ease-sharp);
+}
+.meter-fill.health { background: linear-gradient(90deg, var(--rift-red), var(--forge-orange)); }
+.meter-fill.fuel   { background: linear-gradient(90deg, var(--abyssum-indigo), var(--veil-cyan)); }
+.meter-fill.escort { background: linear-gradient(90deg, var(--forge-orange), var(--oracle-gold)); }
+
+/* TRAIN PATH VISUALIZER */
+#train-path {
+  padding: var(--gap-md);
+  display: flex; flex-direction: column; gap: var(--gap-sm);
+}
+.path-segment {
+  display: flex; align-items: center; gap: var(--gap-sm);
+  font-family: var(--font-mono); font-size: 10px;
+  opacity: 0.5; transition: opacity 0.3s;
+  padding: 4px 0;
+}
+.path-segment.active { opacity: 1; color: var(--veil-cyan); }
+.path-segment.done   { opacity: 0.3; color: var(--text-secondary); }
+.path-segment.danger { opacity: 1; color: var(--rift-red); animation: flicker 0.8s infinite; }
+.seg-icon { font-size: 12px; width: 18px; text-align: center; }
+.seg-line { flex: 1; border-bottom: 1px dashed; opacity: 0.3; }
+.seg-status { font-size: 9px; }
+
+/* CARD DECK IN RIGHT PANEL */
+.card-slot {
+  display: flex; align-items: center; gap: var(--gap-sm);
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(0,255,212,0.04);
+  cursor: pointer; transition: background 0.1s;
+}
+.card-slot:hover { background: rgba(0,255,212,0.03); }
+.card-pip {
+  width: 28px; height: 38px; border-radius: 2px;
+  border: 1px solid var(--panel-border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+.card-pip.active { border-color: var(--forge-orange); background: rgba(245,130,32,0.1); }
+.card-info { flex: 1; }
+.card-name { font-size: 11px; color: var(--text-primary); }
+.card-type { font-family: var(--font-mono); font-size: 9px; color: var(--text-secondary); margin-top: 1px; }
+.card-cost {
+  font-family: var(--font-mono); font-size: 10px;
+  color: var(--forge-amber);
+}
+
+/* ── BOTTOM BAR — CST HMI-HUD ──────────────────────────────────── */
+.hmi-cell {
+  border-right: 1px solid var(--grid-line-bright);
+  display: flex; flex-direction: column;
+  overflow: hidden; position: relative;
+}
+.hmi-cell:last-child { border-right: none; }
+
+.hmi-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 6px 10px;
+  background: rgba(10,5,24,0.95);
+  border-bottom: 1px solid var(--grid-line-bright);
+  flex-shrink: 0;
+}
+.hmi-title {
+  font-family: var(--font-mono); font-size: 8px;
+  letter-spacing: 0.15em; color: var(--text-secondary);
+  text-transform: uppercase;
+}
+.hmi-title span { color: var(--forge-orange); }
+.hmi-badge {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--veil-cyan);
+}
+.hmi-badge.warn { background: var(--forge-orange); animation: pulse-dot 1s infinite; }
+.hmi-badge.off  { background: var(--rift-red-dim); }
+
+.hmi-body {
+  flex: 1; overflow: hidden;
+  display: flex; flex-direction: column;
+  padding: 8px;
+  gap: 4px;
+}
+
+/* IFRAME ASYNC LOAD CONTAINER — 9:16 ASPECT */
+.iframe-load-zone {
+  flex: 1; position: relative;
+  display: flex; align-items: center; justify-content: center;
+  background: radial-gradient(ellipse at center, rgba(26,10,62,0.6) 0%, transparent 70%);
+  border: 1px dashed rgba(0,255,212,0.1);
+  border-radius: 1px;
+  overflow: hidden;
+  min-height: 80px;
+}
+.iframe-load-zone iframe {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  border: none; opacity: 0;
+  transition: opacity 0.5s;
+}
+.iframe-load-zone iframe.loaded { opacity: 1; }
+.iframe-placeholder {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  font-family: var(--font-mono); font-size: 9px; color: var(--text-secondary);
+  text-align: center;
+  animation: placeholder-breathe 2s ease-in-out infinite;
+  z-index: 1;
+}
+.iframe-placeholder .load-spinner {
+  width: 20px; height: 20px;
+  border: 1px solid var(--panel-border);
+  border-top-color: var(--veil-cyan);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* ── TRIPO3D INTEGRATION INDICATOR ─────────────────────────────── */
+.tripo-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: var(--font-mono); font-size: 8px;
+  color: var(--oracle-gold); letter-spacing: 0.1em;
+  padding: 2px 6px;
+  border: 1px solid rgba(255,209,102,0.2);
+  background: rgba(255,209,102,0.04);
+}
+.tripo-badge::before { content: '◈'; font-size: 7px; }
+
+/* ── BOUNDARY STONE COUNTER ────────────────────────────────────── */
+.stone-counter {
+  display: flex; gap: 4px; flex-wrap: wrap;
+  padding: var(--gap-sm) 0;
+}
+.stone-pip {
+  width: 10px; height: 10px;
+  border-radius: 1px;
+  background: var(--forge-dim);
+  border: 1px solid rgba(245,130,32,0.2);
+  transition: all 0.3s;
+}
+.stone-pip.active {
+  background: var(--forge-orange);
+  border-color: var(--forge-amber);
+  box-shadow: 0 0 4px var(--forge-orange);
+}
+
+/* ── SMARTWATCH HUD MODES ───────────────────────────────────────── */
+.smartwatch-display {
+  background: rgba(10,5,24,0.9);
+  border: 1px solid var(--panel-border);
+  border-radius: 2px;
+  padding: 8px;
+  font-family: var(--font-mono);
+  position: relative; overflow: hidden;
+}
+.smartwatch-display::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(0,255,212,0.04), transparent);
+  pointer-events: none;
+}
+.sw-mode-pulse .sw-ring {
+  border: 1px solid var(--veil-cyan); border-radius: 50%;
+  position: absolute; opacity: 0;
+  animation: ring-expand 2s var(--ease-sharp) infinite;
+}
+.sw-ring:nth-child(2) { animation-delay: 0.6s; }
+.sw-ring:nth-child(3) { animation-delay: 1.2s; }
+.sw-data { font-size: 10px; color: var(--veil-cyan); }
+.sw-data span { color: var(--text-secondary); font-size: 8px; }
+
+/* ── MISSION CLOCK ──────────────────────────────────────────────── */
+#mission-clock {
+  font-family: var(--font-display);
+  font-size: 22px; color: var(--veil-cyan);
+  letter-spacing: 0.05em;
+  text-align: center;
+  text-shadow: 0 0 20px rgba(0,255,212,0.4);
+}
+.clock-label {
+  font-family: var(--font-mono); font-size: 8px;
+  color: var(--text-secondary); text-align: center;
+  letter-spacing: 0.2em; text-transform: uppercase;
+}
+
+/* ── ANIMATIONS ─────────────────────────────────────────────────── */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes ring-expand {
+  0%   { transform: scale(0.4); opacity: 0.6; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+@keyframes flicker {
+  0%, 100% { opacity: 1; } 50% { opacity: 0.4; }
+}
+@keyframes placeholder-breathe {
+  0%, 100% { opacity: 0.5; } 50% { opacity: 0.9; }
+}
+@keyframes scanline {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+@keyframes signal-jitter {
+  0%, 100% { transform: translateX(0); }
+  25%  { transform: translateX(-1px); }
+  75%  { transform: translateX(1px); }
+}
+
+/* SCANLINE OVERLAY */
+.scanlines {
+  position: fixed; inset: 0; z-index: 999;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0,0,0,0.025) 0px,
+    rgba(0,0,0,0.025) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+/* GLITCH TEXT */
+.glitch-text {
+  position: relative;
+}
+.glitch-text::before, .glitch-text::after {
+  content: attr(data-text);
+  position: absolute; top: 0; left: 0;
+  opacity: 0.06;
+}
+.glitch-text::before { color: var(--rift-red); transform: translateX(-1px); }
+.glitch-text::after  { color: var(--veil-cyan); transform: translateX(1px); }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--panel-border); border-radius: 2px; }
+
+/* ── PIPELINE STATUS PANEL ─────────────────────────────────────── */
+.pip-row {
+  display: flex; align-items: center; gap: var(--gap-sm);
+  padding: 4px 0; font-family: var(--font-mono); font-size: 9px;
+  border-bottom: 1px solid rgba(0,255,212,0.04);
+}
+.pip-icon { font-size: 10px; width: 14px; }
+.pip-name { flex: 1; color: var(--text-secondary); }
+.pip-status { font-size: 8px; letter-spacing: 0.1em; }
+.pip-status.ok   { color: var(--veil-cyan); }
+.pip-status.warn { color: var(--forge-orange); }
+.pip-status.off  { color: var(--rift-red-dim); }
+
+/* LOADING OVERLAY */
+#loading-overlay {
+  position: fixed; inset: 0; z-index: 500;
+  background: var(--abyssum-deep);
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: var(--gap-lg);
+  transition: opacity 0.8s, visibility 0.8s;
+}
+#loading-overlay.hidden { opacity: 0; visibility: hidden; }
+.loading-logo {
+  font-family: var(--font-display);
+  font-size: 28px; letter-spacing: 0.3em;
+  color: var(--forge-orange);
+}
+.loading-sub {
+  font-family: var(--font-mono); font-size: 10px;
+  color: var(--text-secondary); letter-spacing: 0.2em; text-align: center;
+}
+.loading-bar-track {
+  width: 240px; height: 2px;
+  background: rgba(255,255,255,0.05);
+}
+.loading-bar-fill {
+  height: 100%; width: 0;
+  background: linear-gradient(90deg, var(--abyssum-indigo), var(--veil-cyan));
+  transition: width 0.4s var(--ease-sharp);
+}
+.loading-step {
+  font-family: var(--font-mono); font-size: 9px;
+  color: var(--veil-cyan); letter-spacing: 0.15em;
+  animation: placeholder-breathe 0.8s infinite;
+}
+</style>
+</head>
+<body>
+
+<!-- SCANLINE OVERLAY -->
+<div class="scanlines"></div>
+
+<!-- LOADING OVERLAY -->
+<div id="loading-overlay">
+  <div class="loading-logo glitch-text" data-text="PROJECT ORACLE">PROJECT ORACLE</div>
+  <div class="loading-sub">GENESIS VERSE · ABYSSUM GATEWAY<br>ENIGMATIC UNIVERSES · SIMPRO TITANS STUDIO</div>
+  <div class="loading-bar-track"><div class="loading-bar-fill" id="load-bar"></div></div>
+  <div class="loading-step" id="load-step">INITIALIZING BABYLON.JS ENGINE…</div>
+</div>
+
+<!-- ROOT LAYOUT -->
+<div id="root">
+
+  <!-- ── TOPBAR ── -->
+  <div id="topbar">
+    <div class="topbar-brand">
+      <div class="logo-mark"></div>
+      <div class="logo-text"><span>PROJECT</span> ORACLE</div>
+      <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-secondary);margin-left:12px;letter-spacing:0.1em;">
+        GENESIS VERSE &nbsp;·&nbsp; ABYSSUM GATEWAY
+      </div>
+    </div>
+
+    <div class="topbar-nav">
+      <a href="/" class="nav-tab" style="text-decoration: none; color: var(--veil-cyan); border-color: rgba(0, 255, 212, 0.15); display: inline-block;">↩ RETURN TO HUB</a>
+      <button class="nav-tab active" onclick="setScene('train')">TRAIN ESCORT</button>
+      <button class="nav-tab" onclick="setScene('viewer')">CHAR VIEWER</button>
+      <button class="nav-tab" onclick="setScene('forge')">FORGE NET</button>
+      <button class="nav-tab" onclick="setScene('gateway')">GATEWAY</button>
+    </div>
+
+    <div class="topbar-status">
+      <div class="status-dot"></div>
+      <span class="status-label">ORACLE AI</span>
+      <span class="status-value" id="oracle-mode-display">PULSE</span>
+      &nbsp;&nbsp;
+      <div class="status-dot warn"></div>
+      <span class="status-label">SCENE</span>
+      <span class="status-value" id="fps-display">— FPS</span>
+      &nbsp;&nbsp;
+      <div class="tripo-badge">TRIPO3D</div>
+    </div>
+  </div>
+
+  <!-- ── LEFT PANEL: ORACLE AI ── -->
+  <div id="panel-left">
+    <div id="oracle-panel">
+
+      <div class="oracle-header">
+        <div class="oracle-avatar">🔮</div>
+        <div class="oracle-meta">
+          <div class="oracle-name">ORACLE AI · AVX INTEL</div>
+          <div class="oracle-status">
+            <div class="oracle-pulse"></div>
+            <span id="oracle-status-text">VLAAD ACTIVE · OMEGA CLEARANCE</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- VLAAD MODE CHIPS -->
+      <div class="oracle-modes">
+        <div class="mode-chip pulse active" onclick="setOracleMode('pulse',this)">PULSE</div>
+        <div class="mode-chip trace" onclick="setOracleMode('trace',this)">TRACE</div>
+        <div class="mode-chip veil" onclick="setOracleMode('veil',this)">VEIL</div>
+      </div>
+
+      <!-- PIPELINE STATUS (VLAAD Block) -->
+      <div class="panel-block">
+        <div class="panel-label">PIPELINE STATUS</div>
+        <div class="pip-row"><span class="pip-icon">⬡</span><span class="pip-name">BABYLON.JS 6.x</span><span class="pip-status ok" id="bjs-status">CHECKING…</span></div>
+        <div class="pip-row"><span class="pip-icon">◈</span><span class="pip-name">TRIPO3D API</span><span class="pip-status warn" id="tripo-status">READY · KEY NEEDED</span></div>
+        <div class="pip-row"><span class="pip-icon">⬡</span><span class="pip-name">GLB LOADER</span><span class="pip-status ok" id="glb-status">CHECKING…</span></div>
+        <div class="pip-row"><span class="pip-icon">▣</span><span class="pip-name">FORGE-AVATARS CDN</span><span class="pip-status ok">LIVE</span></div>
+        <div class="pip-row"><span class="pip-icon">▸</span><span class="pip-name">CharacterController</span><span class="pip-status ok">WIRED</span></div>
+        <div class="pip-row"><span class="pip-icon">▸</span><span class="pip-name">NexusVerse / Vercel</span><span class="pip-status warn">EXTERNAL</span></div>
+        <div class="pip-row"><span class="pip-icon">▸</span><span class="pip-name">Supabase</span><span class="pip-status warn">EXTERNAL</span></div>
+      </div>
+
+      <!-- CHAT LOG -->
+      <div id="oracle-chat-log">
+        <div class="oracle-msg ai">
+          <div class="msg-tag">ORACLE AVX · OMEGA · <span id="chat-timestamp">00:00:00</span></div>
+          Commander. Project Oracle Genesis Verse / Abyssum Gateway loaded. Train Escort mission active. Babylon.js engine initialized. Tripo3D pipeline standing by — inject API key to activate generative mesh. CharacterController wired to UIOrchestrator. Zero drift confirmed.
+        </div>
+        <div class="oracle-msg ai">
+          <div class="msg-tag">ORACLE AVX · VLAAD MODE: PULSE</div>
+          <strong style="color:var(--veil-cyan)">PULSE:</strong> Expanding rings reveal terrain and threats. Nothing persists beyond 2 seconds. All signals clean. Recommend TRACE mode when entering Ward 7.
+        </div>
+      </div>
+
+      <div class="oracle-input-row">
+        <input id="oracle-input" type="text" placeholder="Query Oracle AI…" maxlength="200" />
+        <button id="oracle-send" onclick="sendOracleQuery()">SEND</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── CENTER: BABYLON VIEWPORT ── -->
+  <div id="panel-center">
+    <canvas id="babylon-canvas"></canvas>
+
+    <!-- TRAIN HUD OVERLAY -->
+    <div id="train-hud">
+      <div class="corner-bracket tl"></div>
+      <div class="corner-bracket tr"></div>
+      <div class="corner-bracket bl"></div>
+      <div class="corner-bracket br"></div>
+
+      <div class="train-corner tl">
+        <div id="scene-label" style="font-size:10px;color:var(--forge-orange);letter-spacing:0.15em;">CST · TRAIN ESCORT</div>
+        <div style="margin-top:2px;">M01 · CORGEMONT → STONES THROW</div>
+      </div>
+      <div class="train-corner tr">
+        <div id="hud-fps" style="font-size:10px;">-- FPS</div>
+        <div id="hud-poly">-- POLYS</div>
+      </div>
+      <div class="train-corner bl">
+        <div id="hud-state" style="color:var(--veil-cyan);">STATE: --</div>
+        <div id="hud-pos">POS: -- / -- / --</div>
+      </div>
+      <div class="train-corner br">
+        <div>WARD 7 · INDUSTRIAL FORGE</div>
+        <div id="hud-stone-count" style="color:var(--forge-orange);">STONES: 0 / 48</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── RIGHT PANEL: TRAIN ESCORT STATUS ── -->
+  <div id="panel-right">
+
+    <!-- MISSION CLOCK -->
+    <div class="panel-block" style="background:rgba(26,10,62,0.4);">
+      <div class="panel-label">MISSION TIMER</div>
+      <div id="mission-clock">00:00:00</div>
+      <div class="clock-label">EXTRACTION COUNTDOWN</div>
+    </div>
+
+    <!-- TRAIN ESCORT STATS -->
+    <div class="panel-block">
+      <div class="panel-label">ESCORT STATUS</div>
+      <div class="meter-row">
+        <div class="meter-label"><span>TRAIN INTEGRITY</span><span id="train-hp-val">100%</span></div>
+        <div class="meter-track"><div class="meter-fill escort" id="train-hp-bar" style="width:100%"></div></div>
+      </div>
+      <div class="meter-row">
+        <div class="meter-label"><span>OPERATOR HEALTH</span><span id="op-hp-val">100%</span></div>
+        <div class="meter-track"><div class="meter-fill health" id="op-hp-bar" style="width:100%"></div></div>
+      </div>
+      <div class="meter-row">
+        <div class="meter-label"><span>FUEL / RIFT ENERGY</span><span id="fuel-val">84%</span></div>
+        <div class="meter-track"><div class="meter-fill fuel" id="fuel-bar" style="width:84%"></div></div>
+      </div>
+      <div class="stat-row">
+        <span class="stat-key">THREAT LEVEL</span>
+        <span class="stat-val warn" id="threat-level">MODERATE</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-key">ESCORT PHASE</span>
+        <span class="stat-val good" id="escort-phase">BOARD</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-key">ENEMIES ACTIVE</span>
+        <span class="stat-val" id="enemy-count">0</span>
+      </div>
+    </div>
+
+    <!-- TRAIN ROUTE -->
+    <div class="panel-block">
+      <div class="panel-label">ROUTE — FLOODED RAILS</div>
+      <div id="train-path">
+        <div class="path-segment done">
+          <span class="seg-icon">✔</span>
+          <span>CORGEMONT DEPOT</span>
+          <span class="seg-line"></span>
+          <span class="seg-status">CLEAR</span>
+        </div>
+        <div class="path-segment active">
+          <span class="seg-icon">▶</span>
+          <span>BROKEN RAIL ENTRY</span>
+          <span class="seg-line"></span>
+          <span class="seg-status">ACTIVE</span>
+        </div>
+        <div class="path-segment">
+          <span class="seg-icon">○</span>
+          <span>FLOODED PASSAGE</span>
+          <span class="seg-line"></span>
+          <span class="seg-status">AHEAD</span>
+        </div>
+        <div class="path-segment danger">
+          <span class="seg-icon">⚠</span>
+          <span>RIFT GOBLIN SPAWN</span>
+          <span class="seg-line"></span>
+          <span class="seg-status">HOSTILE</span>
+        </div>
+        <div class="path-segment">
+          <span class="seg-icon">◈</span>
+          <span>STONES THROW</span>
+          <span class="seg-line"></span>
+          <span class="seg-status">EXTRACT</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOUNDARY STONES -->
+    <div class="panel-block">
+      <div class="panel-label">BOUNDARY STONES · <span style="color:var(--forge-orange)" id="stone-recovered">0</span>/48</div>
+      <div class="stone-counter" id="stone-counter"></div>
+    </div>
+
+    <!-- CARD DECK -->
+    <div class="panel-block" style="overflow-y:auto;flex:1;">
+      <div class="panel-label">ACTIVE CARDS</div>
+      <div class="card-slot" onclick="activateCard('phase')">
+        <div class="card-pip active">👁</div>
+        <div class="card-info">
+          <div class="card-name">Phase Spy</div>
+          <div class="card-type">INTEL · RECON</div>
+        </div>
+        <div class="card-cost">3⬡</div>
+      </div>
+      <div class="card-slot" onclick="activateCard('glitch')">
+        <div class="card-pip">🔮</div>
+        <div class="card-info">
+          <div class="card-name">Glitch Witch</div>
+          <div class="card-type">OFFENSIVE · VEIL</div>
+        </div>
+        <div class="card-cost">5⬡</div>
+      </div>
+      <div class="card-slot" onclick="activateCard('echo')">
+        <div class="card-pip">〜</div>
+        <div class="card-info">
+          <div class="card-name">Echo Witch</div>
+          <div class="card-type">SUPPORT · PULSE</div>
+        </div>
+        <div class="card-cost">4⬡</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── BOTTOM BAR: CST HMI-HUD IFRAMES ── -->
+  <div id="bottom-bar">
+
+    <!-- CELL 1: ORACLE SMART WATCH -->
+    <div class="hmi-cell">
+      <div class="hmi-header">
+        <span class="hmi-title"><span>CST</span> · SMARTWATCH</span>
+        <div class="hmi-badge"></div>
+      </div>
+      <div class="hmi-body">
+        <div class="smartwatch-display sw-mode-pulse" id="sw-display">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;">
+            <div class="sw-data"><span>HEALTH</span><br><span style="color:var(--text-primary);font-size:13px;" id="sw-health">100</span></div>
+            <div class="sw-data"><span>FUEL</span><br><span style="color:var(--text-primary);font-size:13px;" id="sw-fuel">84</span></div>
+            <div class="sw-data"><span>STATE</span><br><span style="color:var(--text-primary);font-size:11px;" id="sw-state">IDLE</span></div>
+            <div class="sw-data"><span>RIFT LVL</span><br><span style="color:var(--rift-red);font-size:13px;" id="sw-rift">6</span></div>
+          </div>
+          <div style="margin-top:6px;font-size:8px;color:var(--text-secondary)" id="sw-pos-display">0.00 / 0.00 / 0.00</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CELL 2: MISSION HUB IFRAME -->
+    <div class="hmi-cell">
+      <div class="hmi-header">
+        <span class="hmi-title"><span>CST</span> · MISSION HUB</span>
+        <div class="hmi-badge warn"></div>
+      </div>
+      <div class="hmi-body">
+        <div class="iframe-load-zone" id="mission-iframe-zone">
+          <div class="iframe-placeholder" id="mission-ph">
+            <div class="load-spinner"></div>
+            <div>CST_MISSION_HUB_v2</div>
+            <div style="font-size:8px;margin-top:2px;">async loading…</div>
+          </div>
+          <!-- iframe injected async: src="CST_MISSION_HUB_v2.html" -->
+        </div>
+      </div>
+    </div>
+
+    <!-- CELL 3: EPISODE PLAYER IFRAME -->
+    <div class="hmi-cell">
+      <div class="hmi-header">
+        <span class="hmi-title"><span>CST</span> · EP01 COLD BREW</span>
+        <div class="hmi-badge warn"></div>
+      </div>
+      <div class="hmi-body">
+        <div class="iframe-load-zone" id="ep1-iframe-zone">
+          <div class="iframe-placeholder" id="ep1-ph">
+            <div class="load-spinner"></div>
+            <div>CST_EP01_COLD_BREW</div>
+            <div style="font-size:8px;margin-top:2px;">9:16 stream ready</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CELL 4: CARD CAPTOR MINT FRAME -->
+    <div class="hmi-cell">
+      <div class="hmi-header">
+        <span class="hmi-title"><span>FORGE</span> · MINT TO DEPLOY</span>
+        <div class="hmi-badge"></div>
+      </div>
+      <div class="hmi-body">
+        <div class="iframe-load-zone" id="mint-iframe-zone">
+          <div class="iframe-placeholder" id="mint-ph">
+            <div class="load-spinner"></div>
+            <div>MINT TO DEPLOY FORGE</div>
+            <div style="font-size:8px;margin-top:2px;">ABEX / GDEX gauge</div>
+          </div>
+        </div>
+        <!-- ABEX / GDEX inline mini gauge -->
+        <div style="display:flex;gap:6px;margin-top:4px;">
+          <div style="flex:1">
+            <div style="font-family:var(--font-mono);font-size:8px;color:var(--text-secondary)">ABEX</div>
+            <div class="meter-track" style="margin-top:3px;"><div class="meter-fill escort" style="width:62%"></div></div>
+          </div>
+          <div style="flex:1">
+            <div style="font-family:var(--font-mono);font-size:8px;color:var(--text-secondary)">GDEX</div>
+            <div class="meter-track" style="margin-top:3px;"><div class="meter-fill fuel" style="width:38%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CELL 5: TRIPO3D / GLB PIPELINE -->
+    <div class="hmi-cell">
+      <div class="hmi-header">
+        <span class="hmi-title"><span>TRIPO3D</span> · GLB PIPE</span>
+        <div class="hmi-badge"></div>
+      </div>
+      <div class="hmi-body">
+        <div style="font-family:var(--font-mono);font-size:8px;color:var(--text-secondary);margin-bottom:4px;">
+          API KEY STATUS
+        </div>
+        <div style="display:flex;gap:4px;margin-bottom:6px;">
+          <input id="tripo-key-input" type="password" placeholder="tsk_…"
+            style="flex:1;background:rgba(26,10,62,0.6);border:1px solid var(--panel-border);
+            color:var(--text-primary);font-family:var(--font-mono);font-size:9px;
+            padding:4px 6px;outline:none;" />
+          <button onclick="activateTripo()" style="background:rgba(255,209,102,0.1);border:1px solid rgba(255,209,102,0.3);
+            color:var(--oracle-gold);font-family:var(--font-mono);font-size:8px;
+            padding:4px 8px;cursor:pointer;">ARM</button>
+        </div>
+        <div class="pip-row"><span class="pip-icon">◈</span><span class="pip-name">Text→3D</span><span class="pip-status warn" id="tripo-t2m">STANDBY</span></div>
+        <div class="pip-row"><span class="pip-icon">◈</span><span class="pip-name">Image→3D</span><span class="pip-status warn" id="tripo-i2m">STANDBY</span></div>
+        <div class="pip-row"><span class="pip-icon">◈</span><span class="pip-name">GLB Export</span><span class="pip-status warn" id="tripo-exp">STANDBY</span></div>
+        <div style="font-family:var(--font-mono);font-size:8px;color:var(--text-secondary);margin-top:4px;">
+          CDN BASE: Forge-Avatars/models/
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /bottom-bar -->
+
+</div><!-- /root -->
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   PROJECT ORACLE — RUNTIME
+   ENIGMATIC UNIVERSES · SIMPRO TITANS STUDIO · COMMANDER ANTONIO
+   VLAAD DESIGN SYSTEM — Zero Drift Guaranteed
+═══════════════════════════════════════════════════════════════ */
+
+// ── GLOBAL STATE ──────────────────────────────────────────────
+const GAME_STATE = {
+  oracleMode: 'pulse',
+  trainHP: 100,
+  operatorHP: 100,
+  fuel: 84,
+  stonesRecovered: 0,
+  totalStones: 48,
+  missionStart: Date.now(),
+  enemyCount: 0,
+  escortPhase: 'BOARD',
+  babylonReady: false,
+  tripoArmed: false,
+  tripoKey: null,
+  currentScene: 'train',
+  characterState: 'idle',
+  fps: 0,
+};
+
+// ── LOADING SEQUENCE ──────────────────────────────────────────
+const loadSteps = [
+  { pct: 10,  msg: 'BABYLON.JS ENGINE INIT…' },
+  { pct: 25,  msg: 'GLB LOADER MOUNTING…' },
+  { pct: 40,  msg: 'TRAIN ESCORT SCENE BUILDING…' },
+  { pct: 55,  msg: 'ORACLE AI AVX WAKING…' },
+  { pct: 70,  msg: 'HMI-HUD ASYNC STREAMS PRIMED…' },
+  { pct: 85,  msg: 'SMARTWATCH BRIDGE HANDSHAKE…' },
+  { pct: 95,  msg: 'VLAAD DESIGN SYSTEM LOCKED…' },
+  { pct: 100, msg: 'ZERO DRIFT CONFIRMED ✓' },
+];
+let loadIdx = 0;
+const loadBar  = document.getElementById('load-bar');
+const loadStep = document.getElementById('load-step');
+
+function advanceLoader() {
+  if (loadIdx >= loadSteps.length) {
+    setTimeout(() => {
+      document.getElementById('loading-overlay').classList.add('hidden');
+    }, 400);
+    return;
+  }
+  const s = loadSteps[loadIdx++];
+  loadBar.style.width = s.pct + '%';
+  loadStep.textContent = s.msg;
+  const delay = loadIdx === loadSteps.length ? 600 : 250 + Math.random() * 200;
+  setTimeout(advanceLoader, delay);
+}
+setTimeout(advanceLoader, 300);
+
+// ── MISSION CLOCK ─────────────────────────────────────────────
+function updateClock() {
+  const elapsed = Math.floor((Date.now() - GAME_STATE.missionStart) / 1000);
+  const h = String(Math.floor(elapsed / 3600)).padStart(2, '0');
+  const m = String(Math.floor((elapsed % 3600) / 60)).padStart(2, '0');
+  const s = String(elapsed % 60).padStart(2, '0');
+  const ts = `${h}:${m}:${s}`;
+  document.getElementById('mission-clock').textContent = ts;
+  document.getElementById('chat-timestamp').textContent = ts;
+}
+setInterval(updateClock, 1000);
+
+// ── BOUNDARY STONE PIPS ───────────────────────────────────────
+function buildStonePips() {
+  const c = document.getElementById('stone-counter');
+  c.innerHTML = '';
+  for (let i = 0; i < 48; i++) {
+    const p = document.createElement('div');
+    p.className = 'stone-pip' + (i < GAME_STATE.stonesRecovered ? ' active' : '');
+    p.id = 'stone-' + i;
+    c.appendChild(p);
+  }
+}
+buildStonePips();
+
+function recoverStone() {
+  if (GAME_STATE.stonesRecovered >= 48) return;
+  const pip = document.getElementById('stone-' + GAME_STATE.stonesRecovered);
+  if (pip) pip.classList.add('active');
+  GAME_STATE.stonesRecovered++;
+  document.getElementById('stone-recovered').textContent = GAME_STATE.stonesRecovered;
+  document.getElementById('hud-stone-count').textContent =
+    `STONES: ${GAME_STATE.stonesRecovered} / 48`;
+  addOracleMsg(`ORACLE: Boundary Stone ${GAME_STATE.stonesRecovered} recovered. Forge Network signal strength +${GAME_STATE.stonesRecovered * 2}%.`, 'ai');
+}
+
+// ── ORACLE AI ─────────────────────────────────────────────────
+const oracleResponses = {
+  pulse: [
+    "PULSE MODE — Scanning sector. Expanding rings reveal: 3 Rift Rats at grid 7-F, 1 Glitch Goblin inbound from the flooded rails. Nothing persists beyond 2 seconds. All signals nominal.",
+    "PULSE — Train integrity holding at {TRAIN}%. Boundary Stones in sector: 2 confirmed. Recommend advancing through Ward 7 Industrial Forge corridor.",
+    "PULSE — Operator vitals stable. Fuel reserves at {FUEL}%. Rift energy nominal. Recommend TRACE mode when entering the Veil Sector.",
+    "PULSE — Rings expanding. No immediate threats in 20m radius. The flooded Corgemont rails are passable. Proceed to Stones Throw extraction point.",
+  ],
+  trace: [
+    "TRACE MODE — Borrowed map active. Path lines fading. WARNING: Northeast corridor leads to Rift Rat ambush — confidence 73%. Some paths lead to danger.",
+    "TRACE — Tracking operator movement. Fading path confirmed: Corgemont → Broken Rail Entry → Flooded Passage. Stone cache detected 40m ahead — unverified.",
+    "TRACE — Map borrowed from prior operator. Reliability: 61%. Ward 7 Industrial Forge shows heavy NPC presence. Recommend Phase Spy card before entry.",
+  ],
+  veil: [
+    "VEIL MODE ACTIVE — UI signals compromised. Damage = screen desync + frame tear. Elliptical rings distorted. False signals injected. Trust nothing.",
+    "VEIL — [SIGNAL CORRUPTED] — Operator position unknown. Train integrity reading ERROR. Rift level: MAXIMUM. This may be a false positive. Or not.",
+    "VEIL — Distortion active. The Vael'Khari presence is strong here. Qir-origin signature detected. Recommend immediate extraction from sector.",
+  ],
+  default: [
+    "Commander — Standing by. Forge network nominal. NexusVerse Vercel deployment confirmed live. Supabase bridge active. What are your orders?",
+    "Understood, Commander. CharacterController state machine monitoring. scene-mint-deploy-walk.glb confirmed live. Idle and run exports queued.",
+    "Acknowledged. Git push status: check github.com/studioprotitan/Forge-Avatars. Forge-Avatars CDN base URL confirmed active.",
+  ]
+};
+
+function getOracleResponse(query) {
+  const mode = GAME_STATE.oracleMode;
+  const bank = oracleResponses[mode] || oracleResponses.default;
+  let resp = bank[Math.floor(Math.random() * bank.length)];
+  resp = resp.replace('{TRAIN}', GAME_STATE.trainHP);
+  resp = resp.replace('{FUEL}', Math.round(GAME_STATE.fuel));
+
+  // VLAAD contextual triggers
+  const q = query.toLowerCase();
+  if (q.includes('tripo') || q.includes('3d')) {
+    resp = "Tripo3D pipeline: ARM status " + (GAME_STATE.tripoArmed ? "ACTIVE" : "STANDBY") + ". Inject API key (tsk_…) in the GLB Pipe cell below. Once armed: Text→3D, Image→3D, and direct GLB export to Forge-Avatars CDN will be available.";
+  } else if (q.includes('stone') || q.includes('boundary')) {
+    resp = `Boundary Stone recovery: ${GAME_STATE.stonesRecovered}/48. Core loop: Recover all 48 → Restore Real DC → Access Gateways/Portals/Chambers → Enter Faction Wards via Mint to Deploy Forge Network.`;
+  } else if (q.includes('train') || q.includes('escort')) {
+    resp = `Train Escort — Phase: ${GAME_STATE.escortPhase}. Train integrity: ${GAME_STATE.trainHP}%. Route: Corgemont → Broken Rail → Flooded Passage → Rift Goblin Encounter → Stones Throw extraction.`;
+  } else if (q.includes('ert') || q.includes('easter')) {
+    resp = "ERT Easter Egg: Three unlock conditions — (1) Card Convergence: Phase Spy + Glitch Witch + Echo Witch captured. (2) Ending Convergence: EP01+EP02 success + any EP03 ending. (3) Operator Code: type ERT anywhere in hub. All three trigger EP04 SWAT transmission.";
+  } else if (q.includes('vael') || q.includes('khari')) {
+    resp = "CANON — LOCKED: Vael'Khari = galaxy-conquering witch race. Seat: Qir. Two Master Gateways: Genesis Verse (upper) + Abyssum Verse (lower). Transit via Hypechambers and Corridors. Samandra and Monet are NOT allies.";
+  }
+  return resp;
+}
+
+function addOracleMsg(text, type) {
+  const log = document.getElementById('oracle-chat-log');
+  const div = document.createElement('div');
+  div.className = 'oracle-msg ' + type;
+  const tag = document.createElement('div');
+  tag.className = 'msg-tag';
+  tag.textContent = type === 'ai'
+    ? `ORACLE AVX · ${GAME_STATE.oracleMode.toUpperCase()} · ${document.getElementById('mission-clock').textContent}`
+    : `COMMANDER · ${document.getElementById('mission-clock').textContent}`;
+  div.appendChild(tag);
+  const content = document.createElement('div');
+  content.textContent = text;
+  div.appendChild(content);
+  log.appendChild(div);
+  log.scrollTop = log.scrollHeight;
+}
+
+function sendOracleQuery() {
+  const input = document.getElementById('oracle-input');
+  const q = input.value.trim();
+  if (!q) return;
+  addOracleMsg(q, 'user');
+  input.value = '';
+  setTimeout(() => {
+    addOracleMsg(getOracleResponse(q), 'ai');
+  }, 400 + Math.random() * 300);
+}
+
+document.getElementById('oracle-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') sendOracleQuery();
+});
+
+// ── ORACLE MODE ───────────────────────────────────────────────
+function setOracleMode(mode, el) {
+  GAME_STATE.oracleMode = mode;
+  document.querySelectorAll('.mode-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('oracle-mode-display').textContent = mode.toUpperCase();
+  document.getElementById('oracle-status-text').textContent = `VLAAD ${mode.toUpperCase()} MODE ACTIVE`;
+
+  // VEIL mode visual glitch effect
+  if (mode === 'veil') {
+    document.getElementById('babylon-canvas').style.animation = 'signal-jitter 0.1s infinite';
+    document.querySelector('.scanlines').style.opacity = '3';
+  } else {
+    document.getElementById('babylon-canvas').style.animation = '';
+    document.querySelector('.scanlines').style.opacity = '1';
+  }
+  addOracleMsg(`Mode switched to ${mode.toUpperCase()}. ${oracleResponses[mode][0]}`, 'ai');
+}
+
+// ── TRIPO3D ARM ───────────────────────────────────────────────
+function activateTripo() {
+  const key = document.getElementById('tripo-key-input').value.trim();
+  if (!key || !key.startsWith('tsk_')) {
+    addOracleMsg('ORACLE: Invalid Tripo3D key format. Key must begin with tsk_', 'ai');
+    return;
+  }
+  GAME_STATE.tripoKey = key;
+  GAME_STATE.tripoArmed = true;
+  document.getElementById('tripo-status').textContent = 'ARMED';
+  document.getElementById('tripo-status').className = 'pip-status ok';
+  document.getElementById('tripo-t2m').textContent = 'READY';
+  document.getElementById('tripo-t2m').className = 'pip-status ok';
+  document.getElementById('tripo-i2m').textContent = 'READY';
+  document.getElementById('tripo-i2m').className = 'pip-status ok';
+  document.getElementById('tripo-exp').textContent = 'READY';
+  document.getElementById('tripo-exp').className = 'pip-status ok';
+  addOracleMsg('ORACLE: Tripo3D API armed. Text→3D, Image→3D, and GLB export pipelines active. Wire to Forge-Avatars CDN for live deployment.', 'ai');
+}
+
+// ── CARD ACTIVATION ───────────────────────────────────────────
+function activateCard(card) {
+  const effects = {
+    phase: 'Phase Spy deployed — Intel scan active. Revealing hidden Rift Rats in sector. Validity: 8 seconds.',
+    glitch: 'Glitch Witch card played — 3 Rift Rats disrupted. Veil interference injected at grid 7-F.',
+    echo:   'Echo Witch active — Operator fuel restored +12. Pulse signal boosted.',
+  };
+  addOracleMsg(`ORACLE: ${effects[card] || 'Card activated.'}`, 'ai');
+  if (card === 'echo') {
+    GAME_STATE.fuel = Math.min(100, GAME_STATE.fuel + 12);
+    updateMeters();
+  }
+}
+
+// ── SCENE SWITCHER ────────────────────────────────────────────
+function setScene(s) {
+  GAME_STATE.currentScene = s;
+  document.querySelectorAll('.nav-tab').forEach((t, i) => {
+    t.classList.toggle('active', ['train','viewer','forge','gateway'][i] === s);
+  });
+  document.getElementById('scene-label').textContent = {
+    train:   'CST · TRAIN ESCORT',
+    viewer:  'CST · CHAR VIEWER',
+    forge:   'FORGE · NETWORK',
+    gateway: 'ABYSSUM · GATEWAY',
+  }[s] || 'CST';
+  addOracleMsg(`ORACLE: Scene switched to ${s.toUpperCase()}. Babylon.js scene rebuilding…`, 'ai');
+  if (GAME_STATE.babylonReady) buildScene(s);
+}
+
+// ── METERS UPDATE ─────────────────────────────────────────────
+function updateMeters() {
+  document.getElementById('train-hp-bar').style.width = GAME_STATE.trainHP + '%';
+  document.getElementById('train-hp-val').textContent = GAME_STATE.trainHP + '%';
+  document.getElementById('op-hp-bar').style.width = GAME_STATE.operatorHP + '%';
+  document.getElementById('op-hp-val').textContent = GAME_STATE.operatorHP + '%';
+  document.getElementById('fuel-bar').style.width = GAME_STATE.fuel + '%';
+  document.getElementById('fuel-val').textContent = Math.round(GAME_STATE.fuel) + '%';
+  // SmartWatch
+  document.getElementById('sw-health').textContent = GAME_STATE.operatorHP;
+  document.getElementById('sw-fuel').textContent = Math.round(GAME_STATE.fuel);
+  document.getElementById('sw-rift').textContent = Math.round((100 - GAME_STATE.fuel) * 0.4);
+}
+
+// ── BABYLON.JS SCENE ──────────────────────────────────────────
+let engine, scene, camera;
+
+function initBabylon() {
+  const canvas = document.getElementById('babylon-canvas');
+
+  try {
+    engine = new BABYLON.Engine(canvas, true, {
+      preserveDrawingBuffer: true,
+      stencil: true,
+      antialias: true,
+    });
+
+    buildScene('train');
+
+    // Resize handler
+    window.addEventListener('resize', () => engine.resize());
+
+    // FPS ticker
+    setInterval(() => {
+      if (!engine) return;
+      const fps = Math.round(engine.getFps());
+      GAME_STATE.fps = fps;
+      document.getElementById('fps-display').textContent = fps + ' FPS';
+      document.getElementById('hud-fps').textContent = fps + ' FPS';
+    }, 500);
+
+    // Pipeline status
+    document.getElementById('bjs-status').textContent = 'v' + (BABYLON.Engine.Version || '6.x');
+    document.getElementById('bjs-status').className = 'pip-status ok';
+    document.getElementById('glb-status').textContent = 'READY';
+    document.getElementById('glb-status').className = 'pip-status ok';
+    GAME_STATE.babylonReady = true;
+
+  } catch(e) {
+    console.error('Babylon init error:', e);
+    document.getElementById('bjs-status').textContent = 'ERROR';
+    document.getElementById('bjs-status').className = 'pip-status off';
+  }
+}
+
+function buildScene(type) {
+  if (scene) { scene.dispose(); }
+  scene = new BABYLON.Scene(engine);
+  scene.clearColor = new BABYLON.Color4(0.027, 0.027, 0.043, 1);
+
+  // ── CAMERA ──
+  camera = new BABYLON.ArcRotateCamera("cam", -Math.PI/2, Math.PI/3.5, 28, BABYLON.Vector3.Zero(), scene);
+  camera.lowerRadiusLimit = 8;
+  camera.upperRadiusLimit = 50;
+  camera.upperBetaLimit = Math.PI/2.1;
+  camera.attachControl(document.getElementById('babylon-canvas'), true);
+  camera.inertia = 0.7;
+  camera.panningInertia = 0.7;
+
+  // ── LIGHTING ──
+  const hemi = new BABYLON.HemisphericLight("hemi", new BABYLON.Vector3(0, 1, 0), scene);
+  hemi.intensity = 0.3;
+  hemi.diffuse = new BABYLON.Color3(0.4, 0.4, 0.7);
+
+  const sun = new BABYLON.DirectionalLight("sun", new BABYLON.Vector3(1.4, -1, 0.8), scene);
+  sun.intensity = 1.2;
+  sun.diffuse = new BABYLON.Color3(1, 0.9, 0.7);
+
+  const rim = new BABYLON.DirectionalLight("rim", new BABYLON.Vector3(-1, 0.2, -0.5), scene);
+  rim.intensity = 0.35;
+  rim.diffuse = new BABYLON.Color3(0.2, 0.8, 1);
+
+  const shadows = new BABYLON.ShadowGenerator(1024, sun);
+  shadows.useBlurExponentialShadowMap = true;
+
+  if (type === 'train') {
+    buildTrainEscortScene(scene, shadows);
+  } else {
+    buildPlaceholderScene(scene, type);
+  }
+
+  engine.runRenderLoop(() => {
+    if (scene) scene.render();
+  });
+}
+
+// ── TRAIN ESCORT SCENE ────────────────────────────────────────
+function buildTrainEscortScene(scene, shadows) {
+
+  // GROUND — tiled floor (industrial / rail yard)
+  const groundMat = new BABYLON.StandardMaterial("gm", scene);
+  groundMat.diffuseColor = new BABYLON.Color3(0.07, 0.07, 0.09);
+  groundMat.specularColor = new BABYLON.Color3(0.1, 0.1, 0.1);
+
+  for (let x = -8; x <= 8; x++) {
+    for (let z = -5; z <= 5; z++) {
+      const tile = BABYLON.MeshBuilder.CreateBox("t_" + x + "_" + z, {
+        width: 0.98, height: 0.08, depth: 0.98
+      }, scene);
+      tile.position.set(x, 0, z);
+      const mat = new BABYLON.StandardMaterial("tm", scene);
+      const brightness = ((x + z) % 2 === 0) ? 0.08 : 0.06;
+      mat.diffuseColor = new BABYLON.Color3(brightness, brightness * 0.9, brightness * 1.1);
+      mat.specularColor = new BABYLON.Color3(0.05, 0.05, 0.08);
+      tile.material = mat;
+      tile.receiveShadows = true;
+    }
+  }
+
+  // RAIL TRACK — two lines of cylinders
+  const railMat = new BABYLON.StandardMaterial("rail", scene);
+  railMat.diffuseColor = new BABYLON.Color3(0.3, 0.28, 0.25);
+  railMat.specularColor = new BABYLON.Color3(0.5, 0.5, 0.4);
+
+  [-0.7, 0.7].forEach(xOff => {
+    for (let z = -4.5; z <= 4.5; z += 1) {
+      const r = BABYLON.MeshBuilder.CreateBox("rail_" + xOff + "_" + z, {
+        width: 0.12, height: 0.06, depth: 0.9
+      }, scene);
+      r.position.set(xOff, 0.07, z);
+      r.material = railMat;
+      shadows.addShadowCaster(r);
+    }
+  });
+
+  // RAIL TIES (sleepers)
+  const tieMat = new BABYLON.StandardMaterial("tie", scene);
+  tieMat.diffuseColor = new BABYLON.Color3(0.25, 0.18, 0.12);
+
+  for (let z = -4; z <= 4; z += 0.8) {
+    const tie = BABYLON.MeshBuilder.CreateBox("tie_" + z, {
+      width: 2.2, height: 0.05, depth: 0.25
+    }, scene);
+    tie.position.set(0, 0.06, z);
+    tie.material = tieMat;
+    tie.receiveShadows = true;
+  }
+
+  // TRAIN BODY (locomotive placeholder)
+  const trainMat = new BABYLON.StandardMaterial("train", scene);
+  trainMat.diffuseColor = new BABYLON.Color3(0.15, 0.15, 0.2);
+  trainMat.specularColor = new BABYLON.Color3(0.4, 0.4, 0.5);
+  trainMat.emissiveColor = new BABYLON.Color3(0.02, 0.02, 0.04);
+
+  const trainBody = BABYLON.MeshBuilder.CreateBox("trainBody", {
+    width: 1.8, height: 1.4, depth: 5
+  }, scene);
+  trainBody.position.set(0, 0.78, 0);
+  trainBody.material = trainMat;
+  shadows.addShadowCaster(trainBody);
+  trainBody.receiveShadows = true;
+
+  // Train cab
+  const cabMat = new BABYLON.StandardMaterial("cab", scene);
+  cabMat.diffuseColor = new BABYLON.Color3(0.12, 0.12, 0.18);
+  const cab = BABYLON.MeshBuilder.CreateBox("cab", {
+    width: 1.8, height: 0.9, depth: 1.5
+  }, scene);
+  cab.position.set(0, 1.93, 1.75);
+  cab.material = cabMat;
+  shadows.addShadowCaster(cab);
+
+  // FORGE LANTERN — glowing orange point light on train
+  const lantern = new BABYLON.PointLight("lantern", new BABYLON.Vector3(0, 2, 2.8), scene);
+  lantern.diffuse = new BABYLON.Color3(1, 0.5, 0.1);
+  lantern.intensity = 2.5;
+  lantern.range = 12;
+
+  // Lantern mesh
+  const lMesh = BABYLON.MeshBuilder.CreateSphere("lMesh", { diameter: 0.18 }, scene);
+  lMesh.position.set(0, 1.8, 2.8);
+  const lMat = new BABYLON.StandardMaterial("lm", scene);
+  lMat.emissiveColor = new BABYLON.Color3(1, 0.55, 0.1);
+  lMesh.material = lMat;
+
+  // Train wheels
+  const wheelMat = new BABYLON.StandardMaterial("wheel", scene);
+  wheelMat.diffuseColor = new BABYLON.Color3(0.2, 0.2, 0.22);
+  wheelMat.specularColor = new BABYLON.Color3(0.6, 0.6, 0.6);
+
+  const wheelPositions = [
+    [-0.9, -2], [0.9, -2], [-0.9, 0], [0.9, 0], [-0.9, 2], [0.9, 2]
+  ];
+  wheelPositions.forEach(([wx, wz]) => {
+    const w = BABYLON.MeshBuilder.CreateCylinder("wheel", {
+      diameter: 0.55, height: 0.18, tessellation: 16
+    }, scene);
+    w.rotation.z = Math.PI / 2;
+    w.position.set(wx, 0.22, wz);
+    w.material = wheelMat;
+    shadows.addShadowCaster(w);
+  });
+
+  // CARGO WAGONS (2 behind locomotive)
+  const wagonMat = new BABYLON.StandardMaterial("wagon", scene);
+  wagonMat.diffuseColor = new BABYLON.Color3(0.13, 0.1, 0.08);
+
+  [-7, -11.5].forEach((wz, i) => {
+    const wagon = BABYLON.MeshBuilder.CreateBox("wagon" + i, {
+      width: 1.7, height: 1.0, depth: 3.8
+    }, scene);
+    wagon.position.set(0, 0.58, wz);
+    wagon.material = wagonMat;
+    shadows.addShadowCaster(wagon);
+    wagon.receiveShadows = true;
+
+    // BOUNDARY STONE crates on wagon
+    for (let s = 0; s < 3; s++) {
+      const crate = BABYLON.MeshBuilder.CreateBox("crate" + i + s, {
+        width: 0.4, height: 0.4, depth: 0.4
+      }, scene);
+      crate.position.set(-0.5 + s * 0.5, 1.28, wz + (Math.random() * 1 - 0.5));
+      const cMat = new BABYLON.StandardMaterial("cm", scene);
+      cMat.diffuseColor = new BABYLON.Color3(0.6, 0.35, 0.08);
+      cMat.emissiveColor = new BABYLON.Color3(0.08, 0.04, 0.0);
+      crate.material = cMat;
+      shadows.addShadowCaster(crate);
+    }
+  });
+
+  // RIFT RAT ENEMY NPCs (simple capsule placeholders)
+  const riftMat = new BABYLON.StandardMaterial("rift", scene);
+  riftMat.diffuseColor = new BABYLON.Color3(0.5, 0.1, 0.1);
+  riftMat.emissiveColor = new BABYLON.Color3(0.2, 0.0, 0.0);
+
+  const enemyPositions = [
+    [4, 3], [-4, -3], [6, -1], [-5, 4]
+  ];
+
+  const enemies = [];
+  enemyPositions.forEach(([ex, ez], i) => {
+    const body = BABYLON.MeshBuilder.CreateCapsule("enemy" + i, {
+      radius: 0.25, height: 1.2, tessellation: 8
+    }, scene);
+    body.position.set(ex, 0.6, ez);
+    body.material = riftMat;
+    shadows.addShadowCaster(body);
+
+    // Enemy eyes glow
+    const eyeMat = new BABYLON.StandardMaterial("eye", scene);
+    eyeMat.emissiveColor = new BABYLON.Color3(1, 0.1, 0.1);
+    [-0.1, 0.1].forEach(xo => {
+      const eye = BABYLON.MeshBuilder.CreateSphere("eye_" + i + xo, { diameter: 0.06 }, scene);
+      eye.position.set(ex + xo, 1.1, ez + 0.22);
+      eye.material = eyeMat;
+    });
+    enemies.push({ mesh: body, ox: ex, oz: ez, t: Math.random() * Math.PI * 2 });
+  });
+  GAME_STATE.enemyCount = enemies.length;
+  document.getElementById('enemy-count').textContent = enemies.length;
+
+  // INDUSTRIAL PILLARS (Ward 7 backdrop)
+  const pillarMat = new BABYLON.StandardMaterial("pillar", scene);
+  pillarMat.diffuseColor = new BABYLON.Color3(0.12, 0.11, 0.14);
+
+  [[-10, -4], [10, -4], [-10, 4], [10, 4]].forEach(([px, pz]) => {
+    const pillar = BABYLON.MeshBuilder.CreateBox("pillar", {
+      width: 0.6, height: 6, depth: 0.6
+    }, scene);
+    pillar.position.set(px, 3, pz);
+    pillar.material = pillarMat;
+    shadows.addShadowCaster(pillar);
+
+    // Forge light at top
+    const topLight = new BABYLON.PointLight("pLight", new BABYLON.Vector3(px, 6.5, pz), scene);
+    topLight.diffuse = new BABYLON.Color3(1, 0.4, 0.05);
+    topLight.intensity = 0.8;
+    topLight.range = 8;
+  });
+
+  // PARTICLE SYSTEM — forge embers
+  const ps = new BABYLON.ParticleSystem("embers", 80, scene);
+  ps.emitter = new BABYLON.Vector3(0, 0.5, 0);
+  ps.minEmitBox = new BABYLON.Vector3(-10, 0, -5);
+  ps.maxEmitBox = new BABYLON.Vector3(10, 0, 5);
+  ps.color1 = new BABYLON.Color4(1, 0.5, 0.1, 0.8);
+  ps.color2 = new BABYLON.Color4(1, 0.2, 0.05, 0.3);
+  ps.colorDead = new BABYLON.Color4(0, 0, 0, 0);
+  ps.minSize = 0.02; ps.maxSize = 0.06;
+  ps.minLifeTime = 3; ps.maxLifeTime = 7;
+  ps.emitRate = 12;
+  ps.direction1 = new BABYLON.Vector3(-0.3, 1, -0.3);
+  ps.direction2 = new BABYLON.Vector3(0.3, 2, 0.3);
+  ps.minEmitPower = 0.3; ps.maxEmitPower = 0.8;
+  ps.updateSpeed = 0.008;
+  ps.start();
+
+  // ATMOSPHERE FOG
+  scene.fogMode = BABYLON.Scene.FOGMODE_EXP2;
+  scene.fogDensity = 0.018;
+  scene.fogColor = new BABYLON.Color3(0.04, 0.03, 0.06);
+
+  // ── TRAIN ANIMATION ──
+  let trainT = 0;
+  let lanternFlicker = 0;
+  scene.onBeforeRenderObservable.add(() => {
+    const dt = engine.getDeltaTime() * 0.001;
+
+    // Train oscillation (on-track rumble)
+    trainT += dt;
+    trainBody.rotation.z = Math.sin(trainT * 8) * 0.005;
+    trainBody.position.y = 0.78 + Math.sin(trainT * 6) * 0.008;
+
+    // Enemy patrol animation
+    enemies.forEach(e => {
+      e.t += dt * 0.7;
+      e.mesh.position.x = e.ox + Math.sin(e.t) * 1.5;
+      e.mesh.position.z = e.oz + Math.cos(e.t * 0.7) * 1.0;
+      e.mesh.position.y = 0.6 + Math.abs(Math.sin(e.t * 3)) * 0.05;
+    });
+
+    // Lantern flicker
+    lanternFlicker += dt;
+    lantern.intensity = 2.5 + Math.sin(lanternFlicker * 17) * 0.3 + Math.sin(lanternFlicker * 31) * 0.15;
+
+    // HUD update
+    document.getElementById('hud-state').textContent = `STATE: ${GAME_STATE.characterState.toUpperCase()}`;
+    document.getElementById('hud-pos').textContent = `WARD 7 · INDUSTRIAL FORGE`;
+    document.getElementById('hud-poly').textContent =
+      scene.getTotalVertices() + ' VERTS';
+  });
+
+  // Auto stone recovery on demo (every 8 seconds, max 6)
+  let demoStone = 0;
+  const stoneTimer = setInterval(() => {
+    if (demoStone >= 6 || GAME_STATE.stonesRecovered >= 48) { clearInterval(stoneTimer); return; }
+    recoverStone(); demoStone++;
+  }, 8000);
+
+  // Fuel drain simulation
+  setInterval(() => {
+    GAME_STATE.fuel = Math.max(20, GAME_STATE.fuel - 0.1);
+    updateMeters();
+    document.getElementById('sw-state').textContent = GAME_STATE.characterState.toUpperCase();
+    document.getElementById('sw-pos-display').textContent =
+      `${(Math.random()*0.2-0.1).toFixed(2)} / 0.00 / ${(Math.random()*0.2-0.1).toFixed(2)}`;
+  }, 1000);
+}
+
+function buildPlaceholderScene(scene, type) {
+  const cam = new BABYLON.FreeCamera("cam2", new BABYLON.Vector3(0, 2, -5), scene);
+  cam.setTarget(BABYLON.Vector3.Zero());
+
+  const sphere = BABYLON.MeshBuilder.CreateSphere("s", { diameter: 2 }, scene);
+  const mat = new BABYLON.StandardMaterial("m", scene);
+  mat.diffuseColor = new BABYLON.Color3(0.1, 0.3, 0.6);
+  mat.wireframe = true;
+  sphere.material = mat;
+
+  const light = new BABYLON.HemisphericLight("h", new BABYLON.Vector3(0,1,0), scene);
+  light.intensity = 0.8;
+
+  let t = 0;
+  scene.onBeforeRenderObservable.add(() => {
+    t += engine.getDeltaTime() * 0.001;
+    sphere.rotation.y = t * 0.5;
+  });
+  engine.runRenderLoop(() => scene.render());
+}
+
+// ── ASYNC IFRAME LOADING ──────────────────────────────────────
+// Simulates async 9:16 HMI-HUD iframe loads with placeholder → iframe swap
+const iframeTargets = [
+  { zone: 'mission-iframe-zone', ph: 'mission-ph', src: 'CST_MISSION_HUB_v2.html', delay: 2500 },
+  { zone: 'ep1-iframe-zone',     ph: 'ep1-ph',     src: 'CST_EP01_COLD_BREW.html', delay: 3800 },
+  { zone: 'mint-iframe-zone',    ph: 'mint-ph',     src: 'CST_MISSION_HUB_v2.html', delay: 5200 },
+];
+
+iframeTargets.forEach(({ zone, ph, src, delay }) => {
+  setTimeout(() => {
+    const z = document.getElementById(zone);
+    const p = document.getElementById(ph);
+    if (!z) return;
+    const iframe = document.createElement('iframe');
+    iframe.src = src;
+    iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:none;opacity:0;transition:opacity 0.6s;';
+    iframe.onload = () => {
+      iframe.style.opacity = '1';
+      if (p) p.style.display = 'none';
+    };
+    iframe.onerror = () => {
+      // File not found — keep placeholder, update text
+      if (p) {
+        p.querySelector('div:last-child').textContent = src + ' (local)';
+        p.querySelector('div:last-child').style.color = 'var(--forge-amber)';
+        p.querySelector('.load-spinner').style.display = 'none';
+      }
+    };
+    z.appendChild(iframe);
+  }, delay);
+});
+
+// ── KEYBOARD: ERT EASTER EGG ──────────────────────────────────
+let ertBuffer = '';
+document.addEventListener('keydown', e => {
+  ertBuffer = (ertBuffer + e.key).slice(-3).toUpperCase();
+  if (ertBuffer === 'ERT') {
+    addOracleMsg('▌ ERT CONVERGENCE UNLOCKED ▌ — EP04 SWAT Transmission initializing. Three conditions verified. Omega clearance confirmed.', 'ai');
+    ertBuffer = '';
+    // Flash effect
+    document.body.style.filter = 'brightness(2)';
+    setTimeout(() => document.body.style.filter = '', 200);
+  }
+});
+
+// ── INIT ──────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  setTimeout(initBabylon, 800);
+  updateMeters();
+});
+</script>
+</body>
+</html>
